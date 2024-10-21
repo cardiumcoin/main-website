@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AxioGPT & AxioDRAW</title>
+    <link rel="shortcut icon" href="./img/logo.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./img/logo.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla&display=swap');
+@font-face {
+    font-family: 'Formula Condensed';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Formula Condensed Light'), url('./style/font/FormulaCondensed-Light.woff') format('woff');
+    }
+    
+
+@font-face {
+    font-family: 'Formula Condensed Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Formula Condensed Bold'), url('./style/font/FormulaCondensed-Bold.woff') format('woff');
+}
+a{
+    text-decoration: none;
+}
+
+:root{
+    --background-color-nav:#000;
+}
+html{
+    background-color: var(--background-color-nav) !important;
+}
+
+*, *::before, ::after {
+    border: none;
+    border-color: #E2E8F0;
+    font-family: "Fira Code", Sans-serif;
+}
+:where(*, *::before, *::after) {
+    border-width: 0;
+    border-style: solid;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+textarea:focus, input:focus, select:focus {
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+} 
+html, body{
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0px;
+    margin: 0px !important;
+    background: var(--background-main-color);
+    height: 100%;
+}
+
+#initial{
+    display: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+#initial p#pt{
+    position: fixed;
+    bottom: 10%;
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: 0px 20px;
+}
+
+#initial button{
+    flex: 1;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+
+#initial button:nth-child(2){
+    background-color: #333;
+}
+
+#initial button img{
+    width: 80%;
+}
+
+#initial button:nth-child(2) img{
+    filter: invert(1);
+    z-index: 1;
+}
+
+
+#initial button:nth-child(2) img:nth-child(2){
+    width: 20%;
+    position: absolute;
+    bottom: 50px;
+    right: 20%;
+    z-index: 10;
+}
+
+#initial button div{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+#initial button p{
+    color: white;
+    font-size: 32px;
+    margin-top: -20px;
+}
+
+#root,#gpt,#draw{
+    display: none;
+    background-color: var(--background-color-nav);
+    height: 100%;
+    width: 100%;
+}
+
+#draw, #gpt{
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    height: 100%;
+    flex: 1;
+    color: white;
+    padding: 20px;
+    padding-top: 40px;
+}
+
+#gpt #content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: scroll;
+    /* flex: 1; */
+}
+
+#gpt #inpput{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#gpt #inpput input{
+    flex: 1;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    background: #fff0;
+    padding: 12px 10px;
+    margin-right: 10px;
+    color: white;
+    font-size: 15px;
+}
+
+#gpt #inpput button{
+    width: max-content;
+    height: 42px;
+    background: white;
+    color: #000;
+    border-radius: 10px;
+    border: 1px solid white;
+    padding: 0px 12px;
+}
+
+#gpt #contetn #va{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    padding-bottom: 20px;
+}
+#gpt #contetn #va img{
+    filter: invert(1);
+    width: 60px;
+    height: 60px;
+}
+
+#gpt #contetn #war img{
+    filter: invert(1);
+    width: 80px;
+    height: 80px;
+}
+
+#gpt #contetn #va img#userrr{
+    filter: invert(0);
+    width: 60px;
+    height: 60px;
+    padding: 18px;
+}
+
+#gpt #contetn{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 20px 0px;
+    flex: 1;
+}
+
+#gpt #contetn #war{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 0px;
+}
+
+
+#draw p, #draw span{
+    text-align: center;
+}
+
+
+#draw p{
+    font-size: 26px;
+}
+
+#draw input, #draw div:nth-child(3) button{
+    color: #fff;
+    background-color: #000;
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 16px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#draw div:nth-child(3){
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#draw div:nth-child(3) button{
+    flex: 0;
+    margin-left: 10px;
+}
+
+#draw div:nth-child(3) button:hover{
+    color: #000;
+    background-color: white;
+}
+
+#root{
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+#root nav{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#root nav img{
+    width: 60px;
+    height: 60px;
+    filter: invert(1);
+}
+
+#generatedImage{
+    width: 100%;
+    background-color: white;
+    margin-top: 20px;
+}
+
+#generatedImage img{
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#loadingImg{
+    margin-top: 20px;
+    display: none;
+    width: 100%;
+    height: 100px;
+    animation: colorChange 3s infinite;
+}
+
+@keyframes colorChange {
+    0% {
+      background-color: black;
+    }
+    33% {
+      background-color: gray;
+    }
+    66% {
+      background-color: white;
+    }
+    100% {
+      background-color: black;
+    }
+  }
+
+#root nav a{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    margin-right: 20px;    
+    font-family: "Rajdhani",sans-serif;
+    font-weight: 200;
+    line-height: 4rem;
+    letter-spacing: .06em;
+    border: none;
+    padding: 0px;
+}
+
+#root nav a:not([href="./index.html"]):hover {
+    border-bottom: 1px solid #fff;
+}
+
+#root nav div{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+
+#root nav a[href="./index.html"]{
+    font-size: 18px;
+}
+
+#root nav a[href="./app.html"]{
+    border: 1px solid #f69f33;
+    border-radius: 10px;
+    min-width: 85px;
+}
+
+@media screen and (max-width: 600px){
+    #root nav{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #root nav a[href="./index.html"]{
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+    #root nav div{
+        flex-wrap: wrap;
+    }
+    #root nav a{
+        flex: 1;
+    }
+
+    #root nav a[href="./app.html"]{
+        width: 100%;
+
+    }
+}
+
+
+@media screen and (max-width:580px) {
+    #initial{
+        flex-flow: row;
+        align-items: stretch;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        flex-direction: column;
+    }
+    #initial button{
+        width: 100%;
+    }
+    #initial p#pt{
+        position: fixed;
+        bottom: 45%;
+        width: 100%;
+        text-align: center;
+        color: white;
+    }
+    #initial button p{
+        font-size: 26px;
+    }
+}
+
+    </style>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <div id="initial">
+        <button onclick="toD('gpt')" onselect="toD('gpt')">
+            <div>
+                <img src="./img/logo.png" alt="">
+            </div>
+            <p>AxioGPT</p>
+        </button>
+        <button onclick="toD('draw')" onselect="toD('draw')">
+            <div>
+                <img src="./img/logo.png" alt="">
+                <img src="./img/axioaiimage.png" alt="">
+            </div>
+            <p>AxioDRAW</p>
+        </button>
+        <p id="pt">Select which of the two services you want to use.</p>
+    </div>
+
+
+    <div id="root">
+
+        <nav>
+            <a href="./index.html">
+                <img src="./img/logo.png" alt="">
+                <span>AxioAi</span>
+            </a>
+
+            <div>
+                <a href="./app.html#gpt">AxioGPT</a>
+                <a href="./app.html#draw">AxioDRAW</a>
+                <a href="https://discord.gg/axioai">Discord</a>
+                <a href="https://t.me/axioai">Telegram</a>
+            </div>
+        </nav>
+
+        <div id="draw">
+            <p>AxioDRAW</p>
+            <span>Write below the description of the image you want to generate with AI for AxioDRAW</span>
+            <div>
+                <input id="valueInputDraw" type="text">
+                <button onclick="generateDRAWAI()" onselect="generateDRAWAI()">Generate</button>
+            </div>
+            <div id="generatedImage">
+                <img src="" alt="">
+            </div>
+            <div id="loadingImg">
+
+            </div>
+        </div>
+
+        <div id="gpt">
+            <div id="contetn">
+                <div id="war">
+                    <img  src="./img/logo.png" alt="">
+                    <p>How can I help you today?</p>
+                </div>
+            </div>
+
+            <div id="inpput">
+                <input type="text" id="gptInput" placeholder="1+1=?">
+                <button onclick="sendGPT()" onselect="sendGPT()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <img id="userImage" src="./img/download.png" alt="" style="display: none;z-index: -9999;">
+
+    <script defer>
+        
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmBuFVtton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+})
+$(window).on("load", ()=>{
+
+    setInterval(() => {
+        $("#generatedImage").css("height",$("#generatedImage").width())
+        $("#loadingImg").css("height",$("#loadingImg").width())
+        switch(window.location.hash){
+            case "#gpt":
+                $("#root,#draw").css("display", "none")
+                $("#root,#gpt").css("display", "flex")
+                $("html,body").css("height","max-content")
+            break;
+            case "#draw":
+                $("#root,#gpt").css("display", "none")
+                $("#root,#draw").css("display", "flex")
+                $("html,body").css("height","max-content")
+            break;
+            default:
+                $("#root,#gpt,#draw").css("display", "none")
+                $("#initial").css("display", "flex")
+        }
+    }, 500);
+})
+
+function toD(k){
+    window.location.hash=k;
+    document.location.reload(true)
+}
+
+async function generateDRAWAI(){
+    $("#generatedImage").css("display","none")
+    $("#loadingImg").css("display", "flex")
+    var i = $("#valueInputDraw").val();
+    if(i==""){
+        Toast.fire(
+            "Fill in all required fields.",
+            "",
+            "error"
+        )
+    }else{
+        var response = await fetch("https://us-central1-bracefaucet.cloudfunctions.net/generateImage?input="+i)
+        var data = await response.json();
+        $("#loadingImg").css("display", "none")
+        if(!data.error){
+            $("#generatedImage,#generatedImage img").css("display", "flex")
+            $("#generatedImage img").attr("src",data.data)
+        }else{
+            Toast.fire("Error to generate image, please try again.","","error")
+        }
+    }
+}
+
+async function sendGPT(){
+    var i = $("#gptInput").val();
+    if(i == ""){
+        Toast.fire(
+            "Fill in all required fields.",
+            "",
+            "error"
+        )
+    }else{
+        $("#gpt #contetn").append(`<div id='va'><img id="userrr" src="${$("#userImage").attr("src")}"><div><p>You</p><span>${i}</span></div></div>`)
+        var response = await fetch("https://us-central1-bracefaucet.cloudfunctions.net/generateText?input="+i)
+        var data = await response.json();
+        var counter = 0;
+        var a = setInterval(() => {
+        counter++;
+        var dots = "";
+        for (var i = 0; i < counter % 4; i++) {
+            dots += ".";
+        }
+        $("#inpput button").text(dots);
+        if (counter === 4) {
+            counter = 0;
+        }
+        }, 300);
+        if(!data.error){
+            clearInterval(a);
+            $("#inpput button").text("Send");
+            $("#gpt #contetn").append(`<div id='va'><img src="${$("#war img").attr("src")}"><div><p>AxioAI</p><span>${data.data}</span></div></div>`)
+            console.log(data)
+        }else{
+            Toast.fire("Error to generate image, please try again.","","error")
+        }
+    }
+}
+    </script>
+</body>
+</html>

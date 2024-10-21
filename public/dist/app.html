@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AxioGPT & AxioDRAW</title>
+    <link rel="shortcut icon" href="/logo.cecc779a.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/logo.cecc779a.png">
+
+    <style>@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla&display=swap');
+@font-face {
+    font-family: 'Formula Condensed';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Formula Condensed Light'), url('/FormulaCondensed-Light.a60dde53.woff') format('woff');
+    }
+    
+
+@font-face {
+    font-family: 'Formula Condensed Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Formula Condensed Bold'), url('/FormulaCondensed-Bold.49687d96.woff') format('woff');
+}
+a{
+    text-decoration: none;
+}
+
+:root{
+    --background-color-nav:#000;
+}
+html{
+    background-color: var(--background-color-nav) !important;
+}
+
+*, *::before, ::after {
+    border: none;
+    border-color: #E2E8F0;
+    font-family: "Fira Code", Sans-serif;
+}
+:where(*, *::before, *::after) {
+    border-width: 0;
+    border-style: solid;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+textarea:focus, input:focus, select:focus {
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+} 
+html, body{
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0px;
+    margin: 0px !important;
+    background: var(--background-main-color);
+    height: 100%;
+}
+
+#initial{
+    display: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+#initial p#pt{
+    position: fixed;
+    bottom: 10%;
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: 0px 20px;
+}
+
+#initial button{
+    flex: 1;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+
+#initial button:nth-child(2){
+    background-color: #333;
+}
+
+#initial button img{
+    width: 80%;
+}
+
+#initial button:nth-child(2) img{
+    filter: invert(1);
+    z-index: 1;
+}
+
+
+#initial button:nth-child(2) img:nth-child(2){
+    width: 20%;
+    position: absolute;
+    bottom: 50px;
+    right: 20%;
+    z-index: 10;
+}
+
+#initial button div{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+#initial button p{
+    color: white;
+    font-size: 32px;
+    margin-top: -20px;
+}
+
+#root,#gpt,#draw{
+    display: none;
+    background-color: var(--background-color-nav);
+    height: 100%;
+    width: 100%;
+}
+
+#draw, #gpt{
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    height: 100%;
+    flex: 1;
+    color: white;
+    padding: 20px;
+    padding-top: 40px;
+}
+
+#gpt #content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: scroll;
+    /* flex: 1; */
+}
+
+#gpt #inpput{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#gpt #inpput input{
+    flex: 1;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    background: #fff0;
+    padding: 12px 10px;
+    margin-right: 10px;
+    color: white;
+    font-size: 15px;
+}
+
+#gpt #inpput button{
+    width: max-content;
+    height: 42px;
+    background: white;
+    color: #000;
+    border-radius: 10px;
+    border: 1px solid white;
+    padding: 0px 12px;
+}
+
+#gpt #contetn #va{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    padding-bottom: 20px;
+}
+#gpt #contetn #va img{
+    filter: invert(1);
+    width: 60px;
+    height: 60px;
+}
+
+#gpt #contetn #war img{
+    filter: invert(1);
+    width: 80px;
+    height: 80px;
+}
+
+#gpt #contetn #va img#userrr{
+    filter: invert(0);
+    width: 60px;
+    height: 60px;
+    padding: 18px;
+}
+
+#gpt #contetn{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 20px 0px;
+    flex: 1;
+}
+
+#gpt #contetn #war{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 0px;
+}
+
+
+#draw p, #draw span{
+    text-align: center;
+}
+
+
+#draw p{
+    font-size: 26px;
+}
+
+#draw input, #draw div:nth-child(3) button{
+    color: #fff;
+    background-color: #000;
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 16px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#draw div:nth-child(3){
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#draw div:nth-child(3) button{
+    flex: 0;
+    margin-left: 10px;
+}
+
+#draw div:nth-child(3) button:hover{
+    color: #000;
+    background-color: white;
+}
+
+#root{
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+#root nav{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#root nav img{
+    width: 60px;
+    height: 60px;
+    filter: invert(1);
+}
+
+#generatedImage{
+    width: 100%;
+    background-color: white;
+    margin-top: 20px;
+}
+
+#generatedImage img{
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#loadingImg{
+    margin-top: 20px;
+    display: none;
+    width: 100%;
+    height: 100px;
+    animation: colorChange 3s infinite;
+}
+
+@keyframes colorChange {
+    0% {
+      background-color: black;
+    }
+    33% {
+      background-color: gray;
+    }
+    66% {
+      background-color: white;
+    }
+    100% {
+      background-color: black;
+    }
+  }
+
+#root nav a{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    margin-right: 20px;    
+    font-family: "Rajdhani",sans-serif;
+    font-weight: 200;
+    line-height: 4rem;
+    letter-spacing: .06em;
+    border: none;
+    padding: 0px;
+}
+
+#root nav a:not([href="./index.html"]):hover {
+    border-bottom: 1px solid #fff;
+}
+
+#root nav div{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+
+#root nav a[href="./index.html"]{
+    font-size: 18px;
+}
+
+#root nav a[href="./app.html"]{
+    border: 1px solid #f69f33;
+    border-radius: 10px;
+    min-width: 85px;
+}
+
+@media screen and (max-width: 600px){
+    #root nav{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #root nav a[href="./index.html"]{
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+    #root nav div{
+        flex-wrap: wrap;
+    }
+    #root nav a{
+        flex: 1;
+    }
+
+    #root nav a[href="./app.html"]{
+        width: 100%;
+
+    }
+}
+
+
+@media screen and (max-width:580px) {
+    #initial{
+        flex-flow: row;
+        align-items: stretch;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        flex-direction: column;
+    }
+    #initial button{
+        width: 100%;
+    }
+    #initial p#pt{
+        position: fixed;
+        bottom: 45%;
+        width: 100%;
+        text-align: center;
+        color: white;
+    }
+    #initial button p{
+        font-size: 26px;
+    }
+}</style>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <div id="initial">
+        <button onclick="toD('gpt')" onselect="toD('gpt')">
+            <div>
+                <img src="/logo.cecc779a.png" alt="">
+            </div>
+            <p>AxioGPT</p>
+        </button>
+        <button onclick="toD('draw')" onselect="toD('draw')">
+            <div>
+                <img src="/logo.cecc779a.png" alt="">
+                <img src="/axioaiimage.6ce9b3ad.png" alt="">
+            </div>
+            <p>AxioDRAW</p>
+        </button>
+        <p id="pt">Select which of the two services you want to use.</p>
+    </div>
+
+
+    <div id="root">
+
+        <nav>
+            <a href="/index.html">
+                <img src="/logo.cecc779a.png" alt="">
+                <span>AxioAi</span>
+            </a>
+
+            <div>
+                <a href="/app.html#gpt">AxioGPT</a>
+                <a href="/app.html#draw">AxioDRAW</a>
+                <a href="https://discord.gg/axioai">Discord</a>
+                <a href="https://t.me/axioai">Telegram</a>
+            </div>
+        </nav>
+
+        <div id="draw">
+            <p>AxioDRAW</p>
+            <span>Write below the description of the image you want to generate with AI for AxioDRAW</span>
+            <div>
+                <input id="valueInputDraw" type="text">
+                <button onclick="generateDRAWAI()" onselect="generateDRAWAI()">Generate</button>
+            </div>
+            <div id="generatedImage">
+                <img src="" alt="">
+            </div>
+            <div id="loadingImg">
+
+            </div>
+        </div>
+
+        <div id="gpt">
+            <div id="contetn">
+                <div id="war">
+                    <img src="/logo.cecc779a.png" alt="">
+                    <p>How can I help you today?</p>
+                </div>
+            </div>
+
+            <div id="inpput">
+                <input type="text" id="gptInput" placeholder="1+1=?">
+                <button onclick="sendGPT()" onselect="sendGPT()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <img id="userImage" src="/download.142aca94.png" alt="" style="display: none;z-index: -9999;">
+
+    <script defer="">function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+var Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmBuFVtton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: function didOpen(toast) {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  }
+});
+$(window).on("load", function () {
+  setInterval(function () {
+    $("#generatedImage").css("height", $("#generatedImage").width());
+    $("#loadingImg").css("height", $("#loadingImg").width());
+    switch (window.location.hash) {
+      case "#gpt":
+        $("#root,#draw").css("display", "none");
+        $("#root,#gpt").css("display", "flex");
+        $("html,body").css("height", "max-content");
+        break;
+      case "#draw":
+        $("#root,#gpt").css("display", "none");
+        $("#root,#draw").css("display", "flex");
+        $("html,body").css("height", "max-content");
+        break;
+      default:
+        $("#root,#gpt,#draw").css("display", "none");
+        $("#initial").css("display", "flex");
+    }
+  }, 500);
+});
+function toD(k) {
+  window.location.hash = k;
+  document.location.reload(true);
+}
+function generateDRAWAI() {
+  return _generateDRAWAI.apply(this, arguments);
+}
+function _generateDRAWAI() {
+  _generateDRAWAI = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var i, response, data;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          $("#generatedImage").css("display", "none");
+          $("#loadingImg").css("display", "flex");
+          i = $("#valueInputDraw").val();
+          if (!(i == "")) {
+            _context.next = 7;
+            break;
+          }
+          Toast.fire("Fill in all required fields.", "", "error");
+          _context.next = 15;
+          break;
+        case 7:
+          _context.next = 9;
+          return fetch("https://us-central1-bracefaucet.cloudfunctions.net/generateImage?input=" + i);
+        case 9:
+          response = _context.sent;
+          _context.next = 12;
+          return response.json();
+        case 12:
+          data = _context.sent;
+          $("#loadingImg").css("display", "none");
+          if (!data.error) {
+            $("#generatedImage,#generatedImage img").css("display", "flex");
+            $("#generatedImage img").attr("src", data.data);
+          } else {
+            Toast.fire("Error to generate image, please try again.", "", "error");
+          }
+        case 15:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+  return _generateDRAWAI.apply(this, arguments);
+}
+function sendGPT() {
+  return _sendGPT.apply(this, arguments);
+}
+function _sendGPT() {
+  _sendGPT = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var i, response, data, counter, a;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          i = $("#gptInput").val();
+          if (!(i == "")) {
+            _context2.next = 5;
+            break;
+          }
+          Toast.fire("Fill in all required fields.", "", "error");
+          _context2.next = 15;
+          break;
+        case 5:
+          $("#gpt #contetn").append("<div id='va'><img id=\"userrr\" src=\"".concat($("#userImage").attr("src"), "\"><div><p>You</p><span>").concat(i, "</span></div></div>"));
+          _context2.next = 8;
+          return fetch("https://us-central1-bracefaucet.cloudfunctions.net/generateText?input=" + i);
+        case 8:
+          response = _context2.sent;
+          _context2.next = 11;
+          return response.json();
+        case 11:
+          data = _context2.sent;
+          counter = 0;
+          a = setInterval(function () {
+            counter++;
+            var dots = "";
+            for (var i = 0; i < counter % 4; i++) {
+              dots += ".";
+            }
+            $("#inpput button").text(dots);
+            if (counter === 4) {
+              counter = 0;
+            }
+          }, 300);
+          if (!data.error) {
+            clearInterval(a);
+            $("#inpput button").text("Send");
+            $("#gpt #contetn").append("<div id='va'><img src=\"".concat($("#war img").attr("src"), "\"><div><p>AxioAI</p><span>").concat(data.data, "</span></div></div>"));
+            console.log(data);
+          } else {
+            Toast.fire("Error to generate image, please try again.", "", "error");
+          }
+        case 15:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+  return _sendGPT.apply(this, arguments);
+}</script>
+</body>
+</html>
